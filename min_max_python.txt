@@ -1,0 +1,49 @@
+import multiprocessing
+
+# Function to perform parallel reduction and find the minimum value
+def parallel_min(arr):
+    num_processes = multiprocessing.cpu_count()
+    pool = multiprocessing.Pool(processes=num_processes)
+    result = pool.map(min, arr)
+    pool.close()
+    pool.join()
+    return min(result)
+
+# Function to perform parallel reduction and find the maximum value
+def parallel_max(arr):
+    num_processes = multiprocessing.cpu_count()
+    pool = multiprocessing.Pool(processes=num_processes)
+    result = pool.map(max, arr)
+    pool.close()
+    pool.join()
+    return max(result)
+
+# Function to perform parallel reduction and find the sum
+def parallel_sum(arr):
+    num_processes = multiprocessing.cpu_count()
+    pool = multiprocessing.Pool(processes=num_processes)
+    result = pool.map(sum, arr)
+    pool.close()
+    pool.join()
+    return sum(result)
+
+# Function to perform parallel reduction and find the average
+def parallel_average(arr):
+    total_sum = parallel_sum(arr)
+    num_elements = sum(len(subarr) for subarr in arr)
+    return total_sum / num_elements
+
+# Example usage
+data = [ [1, 2, 3, 4, 5, 6, 7, 8,9, 10, 11, 12 ]]
+
+# Parallel minimum
+print("Parallel Minimum:", parallel_min(data))
+
+# Parallel maximum
+print("Parallel Maximum:", parallel_max(data))
+
+# Parallel sum
+print("Parallel Sum:", parallel_sum(data))
+
+# Parallel average
+print("Parallel Average:", parallel_average(data))

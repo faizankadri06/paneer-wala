@@ -1,0 +1,75 @@
+import queue
+import threading
+
+# Undirected graph adjacency list representation
+graph = {
+    0: [1, 2],
+    1: [0, 3, 4],
+    2: [0, 5, 6],
+    3: [1],
+    4: [1],
+    5: [2],
+    6: [2]
+}
+
+# Function to perform parallel BFS
+def parallel_bfs(graph, start_node):
+    visited = set()
+    q = queue.Queue()
+
+    # Mark the start node as visited and enqueue it
+    visited.add(start_node)
+    q.put(start_node)
+
+    while not q.empty():
+        # Get a node from the queue
+        current_node = q.get()
+
+        # Process the current node
+        print("Visited Node (BFS):", current_node)
+
+        # Enqueue the unvisited neighbors in parallel
+        for neighbor in graph[current_node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                q.put(neighbor)
+
+# Function to perform parallel DFS
+def parallel_dfs(graph, start_node):
+    visited = set()
+    stack = []
+
+    # Push the start node to the stack
+    stack.append(start_node)
+
+    while stack:
+        # Get a node from the stack
+        current_node = stack.pop()
+
+        if current_node not in visited:
+            # Mark the current node as visited
+            visited.add(current_node)
+
+            # Process the current node
+            print("Visited Node (DFS):", current_node)
+
+            # Push the unvisited neighbors in parallel
+            for neighbor in graph[current_node]:
+                if neighbor not in visited:
+                    stack.append(neighbor)
+
+# Perform parallel BFS and DFS on the graph
+start_node = 0
+
+# Parallel BFS
+print("Parallel BFS:")
+thread_bfs = threading.Thread(target=parallel_bfs, args=(graph, start_node))
+thread_bfs.start()
+thread_bfs.join()
+
+# Parallel DFS
+print("Parallel DFS:")
+thread_dfs = threading.Thread(target=parallel_dfs, args=(graph, start_node))
+thread_dfs.start()
+thread_dfs.join()
+
